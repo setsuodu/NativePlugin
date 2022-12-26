@@ -107,9 +107,9 @@ public class HookManager : MonoBehaviour
 
         try
         {
-            var javaActivity = new AndroidJavaObject(activityName);
-            Debug.Log($"javaActivity exist: {javaActivity != null}"); //
-            javaActivity.CallStatic("Test1");
+            //var javaActivity = new AndroidJavaObject(activityName);
+            //Debug.Log($"javaActivity exist: {javaActivity != null}"); //
+            //javaActivity.CallStatic("Test1");
             //javaActivity.Call("Test2"); //
         }
         catch (Exception e)

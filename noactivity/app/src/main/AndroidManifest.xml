@@ -12,7 +12,9 @@
         android:supportsRtl="true">
         <!--这不是 activity-->
         <!--<activity android:name="com.moegijinka.noactivity.TestClass" />-->
-        <activity android:name="com.moegijinka.noactivity.MainActivity">
+        <activity android:name=".OverrideExample"
+            android:label="@string/app_name"
+            android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
