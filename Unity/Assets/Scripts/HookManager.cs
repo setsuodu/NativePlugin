@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HookManager : MonoBehaviour
 {
+    private const string activityName = "com.moegijinka.noactivity.TestClass"; //TestClass.java
     private const string className = "com.moegijinka.noactivity.TestClass"; //TestClass.java
     private AndroidJavaClass jc = null;
     private AndroidJavaObject jo = null;
@@ -89,7 +90,22 @@ public class HookManager : MonoBehaviour
 
     void Start()
     {
-        TestExtend();
+        var unityClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        Debug.Log($"unityClass exist: {unityClass != null}"); //True
+        var unityActivity = unityClass.GetStatic<AndroidJavaObject>("currentActivity");
+        Debug.Log($"unityActivity exist: {unityActivity != null}"); //True
+
+        //AndroidJavaClass javaClass = new AndroidJavaClass(className);
+        //Debug.Log($"javaClass exist: {javaClass != null}"); //True
+        //javaClass.CallStatic("CallAndroid", unityActivity); //正确
+
+        //AndroidJavaObject javaObject = new AndroidJavaObject(className);
+        //Debug.Log($"javaObject exist: {javaObject != null}"); //True
+        //javaObject.CallStatic("CallAndroid", unityActivity); //正确
+
+        Debug.Log("AAA");
+
+        AndroidJavaClass javaClass = new AndroidJavaClass(className);
     }
 
     public void Dispose()
