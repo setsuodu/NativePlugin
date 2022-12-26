@@ -7,7 +7,6 @@ import com.unity3d.player.UnityPlayerActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 public class MainActivity extends UnityPlayerActivity {
@@ -22,25 +21,32 @@ public class MainActivity extends UnityPlayerActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
         currentActivity = MainActivity.this;
         System.out.println("MainActivity.onCreate:");
     }
     @Override
     protected void onPause() {
-        super.onPause();
         System.out.println("MainActivity.onPause: 切到后台");
+        super.onPause();
     }
     @Override
     protected void onResume() {
-        super.onResume();
         System.out.println("MainActivity.onResume: 切回来激活");
         onListen();
+        super.onResume();
     }
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         System.out.println("MainActivity.onDestroy: 销毁");
+        super.onDestroy();
+    }
+
+    public static void Test1() {
+        System.out.println("MainActivity.Test1");
+    }
+
+    public void Test2() {
+        System.out.println("MainActivity.Test2");
     }
 
     // 监听外部唤起本App

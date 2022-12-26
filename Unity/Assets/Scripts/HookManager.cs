@@ -105,7 +105,19 @@ public class HookManager : MonoBehaviour
 
         Debug.Log("AAA");
 
-        AndroidJavaClass javaClass = new AndroidJavaClass(className);
+        try
+        {
+            var javaActivity = new AndroidJavaObject(activityName);
+            Debug.Log($"javaActivity exist: {javaActivity != null}"); //
+            javaActivity.CallStatic("Test1");
+            //javaActivity.Call("Test2"); //
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"error javaActivity: {e}");
+        }
+
+        Debug.Log("BBB");
     }
 
     public void Dispose()
