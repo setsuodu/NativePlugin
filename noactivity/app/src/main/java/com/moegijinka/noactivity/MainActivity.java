@@ -1,6 +1,8 @@
-package com.moegijinka.moelibs;
+package com.moegijinka.noactivity;
 
-import androidx.appcompat.app.AppCompatActivity;
+//import androidx.appcompat.app.AppCompatActivity;
+import com.unity3d.player.UnityPlayer;
+import com.unity3d.player.UnityPlayerActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,11 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.unity3d.player.UnityPlayer;
-//import com.unity3d.player.UnityPlayerActivity;
-
-//public class MainActivity extends UnityPlayerActivity {
-public class MainActivity extends Activity {
+public class MainActivity extends UnityPlayerActivity {
     public static Activity currentActivity;
     private static final String TAG = "TimPlugin";
     private static String gameObjectName;
@@ -26,23 +24,23 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.activity_main);
         currentActivity = MainActivity.this;
-        Log.d(TAG, "MainActivity.onCreate: ");
+        System.out.println("MainActivity.onCreate:");
     }
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d("TAG", "MainActivity.onPause: 切到后台");
+        System.out.println("MainActivity.onPause: 切到后台");
     }
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d("TAG", "MainActivity.onResume: 切回来激活");
+        System.out.println("MainActivity.onResume: 切回来激活");
         onListen();
     }
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d("TAG", "MainActivity.onDestroy: 销毁");
+        System.out.println("MainActivity.onDestroy: 销毁");
     }
 
     // 监听外部唤起本App

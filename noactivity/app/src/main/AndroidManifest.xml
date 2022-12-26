@@ -12,6 +12,12 @@
         android:supportsRtl="true">
         <!--这不是 activity-->
         <!--<activity android:name="com.moegijinka.noactivity.TestClass" />-->
+        <activity android:name="com.moegijinka.noactivity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

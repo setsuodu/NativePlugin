@@ -1,8 +1,10 @@
-# 2021.最新Native插件制作
+# [2021.最新Native插件制作
 
 
 
 - [ ] github.com/setsuodu/NativePluginDemo.git 删除
+- [ ] [Android Studio与unity交互](https://bbs.huaweicloud.com/blogs/285723)
+- [ ] [官方示例](https://docs.unity3d.com/2019.3/Documentation/Manual/AndroidUnityPlayerActivity.html)
 
 
 
@@ -23,10 +25,13 @@
 
    ``\Editor\Data\PlaybackEngines\AndroidPlayer\Variations\mono\Release\Classes\classes.jar``
 
-6. UntiyPlayerActivity.java 位置：（Unity2019后，UnityPlayerActivity.java不在class里面了，需要单独拷贝）
+6. UntiyPlayerActivity.java 位置：
 
    ``\Editor\Data\PlaybackEngines\AndroidPlayer\Source\com\unity3d\player\UnityPlayerActivity.java``
 
+   - （Unity2019后，UnityPlayerActivity.java不在class里面了，需要单独拷贝）
+   - Android 工程中，只能有一个 class 继承它。``class MainActivity extends UnityPlayerActivity``
+   
    
 
 ## Gradle设置

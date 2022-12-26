@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,49 +8,88 @@ public class HookManager : MonoBehaviour
     private AndroidJavaClass jc = null;
     private AndroidJavaObject jo = null;
 
-    void Start()
+    void TestBasic()
     {
-        /*
-        try
-        {
-            //jc = new AndroidJavaClass(className);
-            //jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
-            //jo.CallStatic("Test1"); //public void Test1()
-
-            // Retrieve the UnityPlayer class.
-            //AndroidJavaClass unityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-            // Retrieve the UnityPlayerActivity object ( a.k.a. the current context )
-            //AndroidJavaObject unityActivity = unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e);
-        }
-        */
-
+        // Retrieve the UnityPlayer class.
+        //AndroidJavaClass unityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+        // Retrieve the UnityPlayerActivity object ( a.k.a. the current context )
+        //AndroidJavaObject unityActivity = unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
 
         try
         {
             AndroidJavaClass testC = new AndroidJavaClass(className);
             Debug.Log($"testC exist: {testC != null}"); //True
-            //testC.Call("Test1"); //����
-            testC.CallStatic("Test2"); //��ȷ
+            //testC.Call("Test1"); //错误
+            testC.CallStatic("Test2"); //正确
         }
         catch (Exception e)
         {
             Debug.LogError($"errorC: {e}");
         }
+
         try
         {
             AndroidJavaObject testO = new AndroidJavaObject(className);
             Debug.Log($"testO exist: {testO != null}"); //True
-            //testO.Call("Test1"); //��ȷ
-            testO.CallStatic("Test2"); //��ȷ
+            //testO.Call("Test1"); //正确 //public void Test1()
+            testO.CallStatic("Test2"); //正确 //public static void Test2()
         }
         catch (Exception e)
         {
             Debug.LogError($"errorO: {e}");
         }
+    }
+
+    void TestExtend()
+    {
+        /*
+        try
+        {
+            // 错误
+            Debug.Log("使用标准");
+            //jc = new AndroidJavaClass("com.moegijinka.noactivity.MainActivity");
+            //jo.CallStatic("GetInstance", gameObject.name);
+
+            jc = new AndroidJavaClass("com.moegijinka.noactivity.MainActivity");
+            Debug.Log($"标准jc exist: {jc != null}"); //
+            jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
+            Debug.Log($"标准jo exist: {jo != null}"); //
+            jo.CallStatic("GetInstance", gameObject.name);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"error 使用标准: {e}");
+        }
+        */
+
+        try
+        {
+            Debug.Log("使用jc");
+            jc = new AndroidJavaClass("com.moegijinka.noactivity.MainActivity");
+            Debug.Log($"jc exist: {jc != null}"); //
+            jc.CallStatic("GetInstance", gameObject.name);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"error 使用jc: {e}");
+        }
+
+        try
+        {
+            Debug.Log("使用jo");
+            jo = new AndroidJavaObject("com.moegijinka.noactivity.MainActivity");
+            Debug.Log($"jo exist: {jo != null}"); //
+            jo.CallStatic("GetInstance", gameObject.name);
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"error 使用jo: {e}");
+        }
+    }
+
+    void Start()
+    {
+        TestExtend();
     }
 
     public void Dispose()
