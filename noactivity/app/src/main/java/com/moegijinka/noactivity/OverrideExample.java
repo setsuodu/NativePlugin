@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 public class OverrideExample extends UnityPlayerActivity {
+    static String objectName;
     static Activity _activity;
     public static Activity getActivity() {
         return _activity;
@@ -50,6 +51,11 @@ public class OverrideExample extends UnityPlayerActivity {
         System.out.println("OverrideExample.onBackPressed");
     }
 
+    public static void GetInstance(String gameobjectName) {
+        System.out.println("OverrideExample.GetInstance: " + gameobjectName);
+        objectName = gameobjectName;
+    }
+
     public boolean checkInstall(String packageName) {
 //        String packageName = "com.moegijinka.gamecenter";
 //        String packageName = "com.king.zxing.app";
@@ -63,6 +69,6 @@ public class OverrideExample extends UnityPlayerActivity {
     }
 
     public void SendToUnity(String message) {
-        UnityPlayer.UnitySendMessage("Hook", "JavaToUnity", message);
+        UnityPlayer.UnitySendMessage(objectName, "JavaToUnity", message);
     }
 }

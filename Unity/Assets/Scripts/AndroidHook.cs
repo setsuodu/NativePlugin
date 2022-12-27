@@ -14,9 +14,9 @@ public class AndroidHook : IDisposable
     {
         try
         {
-            jc = new AndroidJavaClass(className);
-            jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
-            jo.CallStatic("GetInstance", go.name);
+            var javaActivity = new AndroidJavaObject(activityName);
+            Debug.Log($"javaActivity exist: {javaActivity != null}");
+            javaActivity.CallStatic("GetInstance", go.name);
         }
         catch (Exception e)
         {
