@@ -1,13 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HookManager : MonoBehaviour
 {
-    private const string activityName = "com.moegijinka.noactivity.TestClass"; //TestClass.java
+    private const string activityName = "com.moegijinka.noactivity.OverrideExample"; //TestClass.java
     private const string className = "com.moegijinka.noactivity.TestClass"; //TestClass.java
     private AndroidJavaClass jc = null;
     private AndroidJavaObject jo = null;
+
+    public Button btnJump;
 
     void TestBasic()
     {
@@ -88,6 +90,43 @@ public class HookManager : MonoBehaviour
         }
     }
 
+    void onJumpActivity()
+    {
+        //string packageName = "com.king.zxing.app";
+        string packageName = "com.yarolegovich.discretescrollview.sample";
+        string className = "com.yarolegovich.discretescrollview.sample.shop.ShopActivity";
+        ///*
+        try
+        {
+            var javaActivity = new AndroidJavaObject(activityName);
+            Debug.Log($"javaActivity exist: {javaActivity != null}");
+            var result = javaActivity.Call<bool>("checkInstall", packageName);
+            Debug.Log($"checkInstall: {result}");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"error javaActivity: {e}");
+        }
+        //*/
+
+        try
+        {
+            var javaActivity = new AndroidJavaObject(activityName);
+            Debug.Log($"javaActivity exist: {javaActivity != null}"); //
+            javaActivity.Call("onJumpActivity", packageName, className);
+            Debug.Log($"onJumpActivity done.");
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"error javaActivity: {e}");
+        }
+    }
+
+    void Awake()
+    {
+        btnJump.onClick.AddListener(onJumpActivity);
+    }
+
     void Start()
     {
         var unityClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
@@ -107,10 +146,12 @@ public class HookManager : MonoBehaviour
 
         try
         {
-            //var javaActivity = new AndroidJavaObject(activityName);
-            //Debug.Log($"javaActivity exist: {javaActivity != null}"); //
+            var javaActivity = new AndroidJavaObject(activityName);
+            Debug.Log($"javaActivity exist: {javaActivity != null}"); //
             //javaActivity.CallStatic("Test1");
-            //javaActivity.Call("Test2"); //
+            string packageName = "com.king.zxing.app";
+            var result = javaActivity.Call<bool>("checkInstall", packageName);
+            Debug.Log($"checkInstall: {result}");
         }
         catch (Exception e)
         {
