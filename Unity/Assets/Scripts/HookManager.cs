@@ -1,161 +1,71 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class HookManager : MonoBehaviour
 {
-    private const string activityName = "com.moegijinka.noactivity.OverrideExample"; //TestClass.java
-    private const string className = "com.moegijinka.noactivity.TestClass"; //TestClass.java
-    private AndroidJavaClass jc = null;
-    private AndroidJavaObject jo = null;
+    public static HookManager Get;
+
+    private AndroidHook hook;
 
     public Button btnJump;
 
-    void TestBasic()
-    {
-        // Retrieve the UnityPlayer class.
-        //AndroidJavaClass unityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-        // Retrieve the UnityPlayerActivity object ( a.k.a. the current context )
-        //AndroidJavaObject unityActivity = unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
-
-        try
-        {
-            AndroidJavaClass testC = new AndroidJavaClass(className);
-            Debug.Log($"testC exist: {testC != null}"); //True
-            //testC.Call("Test1"); //错误
-            testC.CallStatic("Test2"); //正确
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"errorC: {e}");
-        }
-
-        try
-        {
-            AndroidJavaObject testO = new AndroidJavaObject(className);
-            Debug.Log($"testO exist: {testO != null}"); //True
-            //testO.Call("Test1"); //正确 //public void Test1()
-            testO.CallStatic("Test2"); //正确 //public static void Test2()
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"errorO: {e}");
-        }
-    }
-
-    void TestExtend()
-    {
-        /*
-        try
-        {
-            // 错误
-            Debug.Log("使用标准");
-            //jc = new AndroidJavaClass("com.moegijinka.noactivity.MainActivity");
-            //jo.CallStatic("GetInstance", gameObject.name);
-
-            jc = new AndroidJavaClass("com.moegijinka.noactivity.MainActivity");
-            Debug.Log($"标准jc exist: {jc != null}"); //
-            jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
-            Debug.Log($"标准jo exist: {jo != null}"); //
-            jo.CallStatic("GetInstance", gameObject.name);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"error 使用标准: {e}");
-        }
-        */
-
-        try
-        {
-            Debug.Log("使用jc");
-            jc = new AndroidJavaClass("com.moegijinka.noactivity.MainActivity");
-            Debug.Log($"jc exist: {jc != null}"); //
-            jc.CallStatic("GetInstance", gameObject.name);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"error 使用jc: {e}");
-        }
-
-        try
-        {
-            Debug.Log("使用jo");
-            jo = new AndroidJavaObject("com.moegijinka.noactivity.MainActivity");
-            Debug.Log($"jo exist: {jo != null}"); //
-            jo.CallStatic("GetInstance", gameObject.name);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"error 使用jo: {e}");
-        }
-    }
-
-    void onJumpActivity()
-    {
-        string packageName = "com.moegijinka.gamecenter";
-        string className = "com.moegijinka.gamecenter.NormalActivity";
-        ///*
-        try
-        {
-            var javaActivity = new AndroidJavaObject(activityName);
-            Debug.Log($"javaActivity exist: {javaActivity != null}");
-            var result = javaActivity.Call<bool>("checkInstall", packageName);
-            Debug.Log($"checkInstall: {result}");
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"error javaActivity: {e}");
-        }
-        //*/
-
-        try
-        {
-            var javaActivity = new AndroidJavaObject(activityName);
-            Debug.Log($"javaActivity exist: {javaActivity != null}"); //
-            javaActivity.Call("onJumpActivity", packageName, className, "");
-            Debug.Log($"onJumpActivity done.");
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"error javaActivity: {e}");
-        }
-    }
-
     void Awake()
     {
-        btnJump.onClick.AddListener(onJumpActivity);
+        Get = this;
+        DontDestroyOnLoad(this.gameObject);
+
+#if UNITY_ANDROID
+        hook = new AndroidHook(gameObject);
+        btnJump.onClick.AddListener(hook.JumpActivity);
+#elif UNITY_IOS
+        //hook = new iOSHook(gameObject);
+#else
+        hook = null;
+#endif
     }
 
-    void Start()
+    void OnDestroy()
     {
-        Debug.Log("AAA");
-
-        try
-        {
-            var javaActivity = new AndroidJavaObject(activityName);
-            Debug.Log($"javaActivity exist: {javaActivity != null}"); //
-            string packageName = "com.moegijinka.gamecenter";
-            var result = javaActivity.Call<bool>("checkInstall", packageName);
-            Debug.Log($"checkInstall: {result}");
-        }
-        catch (Exception e)
-        {
-            Debug.LogError($"error javaActivity: {e}");
-        }
-
-        Debug.Log("BBB");
+        hook?.Dispose();
     }
 
-    public void Dispose()
-    {
-        jc?.Dispose();
-        jc = null;
-        jo?.Dispose();
-        jo = null;
-    }
-
+    // 字符串消息返回
     public void JavaToUnity(string message)
     {
         Debug.Log($"Unity recv: {message}");
+    }
+    // json消息返回
+    public void JsonToUnity(string json)
+    {
+        /*
+        var obj = JsonConvert.DeserializeObject<TimCallback>(json);
+        switch ((TimSdkMessage)obj.msg)
+        {
+            case TimSdkMessage.OnForceOffline: //顶号
+                {
+                    PanelManager.Instance.CloseAll();
+                    PanelManager.Instance.CreatePanel<UI_Login>();
+                    ToastManager.Show("账号在别处登录", 0.5f, MaterialUIManager.UIRoot);
+                }
+                break;
+            case TimSdkMessage.Logout: //登出
+                if (obj.code == 0)
+                {
+                    Debug.Log($"<color=green>登出.成功：{obj.data}</color>");
+
+                    PanelManager.Instance.CloseAll();
+                    PanelManager.Instance.CreatePanel<UI_Login>();
+                }
+                else
+                {
+                    Debug.LogError($"登出.失败：code={obj.code}, data={obj.data}");
+                }
+                break;
+            default:
+                Debug.Log($"[Notify] msg=[{obj.msg}]{(TimSdkMessage)obj.msg}, code={obj.code}, data={obj.data}");
+                TimEventManager.Notify((TimSdkMessage)obj.msg, obj); //对UIWidget推送消息
+                break;
+        }
+        */
     }
 }
