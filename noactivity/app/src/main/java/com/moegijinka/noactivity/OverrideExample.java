@@ -40,6 +40,9 @@ public class OverrideExample extends UnityPlayerActivity {
             if (appName != null && appName.isEmpty() == false) {
                 System.out.println("收到来自" + appName + "的消息");
                 SendJsonToUnity(tokenJson);
+
+                bundle.remove(appName); //请求一次移除一次，避免反复跳
+                bundle.remove(tokenJson);
             }
         } else {
             System.out.println("onResume.error: 没有bundle");
