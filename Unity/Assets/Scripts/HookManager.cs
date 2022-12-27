@@ -92,9 +92,8 @@ public class HookManager : MonoBehaviour
 
     void onJumpActivity()
     {
-        //string packageName = "com.king.zxing.app";
-        string packageName = "com.yarolegovich.discretescrollview.sample";
-        string className = "com.yarolegovich.discretescrollview.sample.shop.ShopActivity";
+        string packageName = "com.moegijinka.gamecenter";
+        string className = "com.moegijinka.gamecenter.NormalActivity";
         ///*
         try
         {
@@ -113,7 +112,7 @@ public class HookManager : MonoBehaviour
         {
             var javaActivity = new AndroidJavaObject(activityName);
             Debug.Log($"javaActivity exist: {javaActivity != null}"); //
-            javaActivity.Call("onJumpActivity", packageName, className);
+            javaActivity.Call("onJumpActivity", packageName, className, "");
             Debug.Log($"onJumpActivity done.");
         }
         catch (Exception e)
@@ -129,27 +128,13 @@ public class HookManager : MonoBehaviour
 
     void Start()
     {
-        var unityClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-        Debug.Log($"unityClass exist: {unityClass != null}"); //True
-        var unityActivity = unityClass.GetStatic<AndroidJavaObject>("currentActivity");
-        Debug.Log($"unityActivity exist: {unityActivity != null}"); //True
-
-        //AndroidJavaClass javaClass = new AndroidJavaClass(className);
-        //Debug.Log($"javaClass exist: {javaClass != null}"); //True
-        //javaClass.CallStatic("CallAndroid", unityActivity); //正确
-
-        //AndroidJavaObject javaObject = new AndroidJavaObject(className);
-        //Debug.Log($"javaObject exist: {javaObject != null}"); //True
-        //javaObject.CallStatic("CallAndroid", unityActivity); //正确
-
         Debug.Log("AAA");
 
         try
         {
             var javaActivity = new AndroidJavaObject(activityName);
             Debug.Log($"javaActivity exist: {javaActivity != null}"); //
-            //javaActivity.CallStatic("Test1");
-            string packageName = "com.king.zxing.app";
+            string packageName = "com.moegijinka.gamecenter";
             var result = javaActivity.Call<bool>("checkInstall", packageName);
             Debug.Log($"checkInstall: {result}");
         }
@@ -167,5 +152,10 @@ public class HookManager : MonoBehaviour
         jc = null;
         jo?.Dispose();
         jo = null;
+    }
+
+    public void JavaToUnity(string message)
+    {
+        Debug.Log($"Unity recv: {message}");
     }
 }

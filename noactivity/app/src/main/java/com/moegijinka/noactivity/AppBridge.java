@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -81,22 +82,29 @@ public class AppBridge {
 
 
     // 方案1.跳转指定页面（目标的Activity，需要设置android:exported="true"）
-    public static void JumpFunc1(Activity activity, String packageName, String className) {
+    public static void JumpFunc1(Activity activity, String packageName, String className, String token) {
         ComponentName componentName = new ComponentName(packageName, className);//这里是 包名  以及 页面类的全称
         Intent intent = new Intent();
         intent.setComponent(componentName);
-        intent.putExtra("type", "110");
+        String selfName = activity.getPackageName();
+        System.out.println("selfName = " + selfName);
+        intent.putExtra("appName", selfName);
+        intent.putExtra("token", token);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intent);
     }
     // 方案2.跳转指定页面
-    public static void JumpFunc2(Activity activity, String packageName, String className) {
+    public static void JumpFunc2(Activity activity, String packageName, String className, String token) {
         Intent intent = activity.getPackageManager().getLaunchIntentForPackage(packageName);
         // 这里如果intent为空，就说名没有安装要跳转的应用嘛
         if (intent != null) {
             // 这里跟Activity传递参数一样的嘛，不要担心怎么传递参数，还有接收参数也是跟Activity和Activity传参数一样
-            intent.putExtra("name", "Liu xiang");
-            intent.putExtra("birthday", "1983-7-13");
+//            intent.putExtra("name", "Liu xiang");
+//            intent.putExtra("birthday", "1983-7-13");
+            String selfName = activity.getPackageName();
+            System.out.println("selfName = " + selfName);
+            intent.putExtra("appName", selfName);
+            intent.putExtra("token", token);
             if(className.isEmpty() == false)
                 intent.setClassName(packageName, className);
             activity.startActivity(intent);
